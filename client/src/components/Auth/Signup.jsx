@@ -9,6 +9,7 @@ const Signup = ({ onLogin }) => {
     password: '',
     role: 'admin',
     country: '',
+    currencyCode: 'USD',
     companyName: ''
   });
   const [countries, setCountries] = useState([]);
@@ -29,10 +30,20 @@ const Signup = ({ onLogin }) => {
   };
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    const { name, value } = e.target;
+    if (name === 'country') {
+      const selectedCountry = countries.find(c => c.name === value);
+      setFormData({
+        ...formData,
+        country: value,
+        currencyCode: selectedCountry?.currency || formData.currencyCode
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -140,9 +151,34 @@ const Signup = ({ onLogin }) => {
                 <option value="">Select a country</option>
                 {countries.map((country) => (
                   <option key={country.code} value={country.name}>
-                    {country.name} ({country.currency})
+                    {country.name}
                   </option>
                 ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="currencyCode" className="block text-sm font-medium text-gray-700">
+                Company Currency
+              </label>
+              <select
+                id="currencyCode"
+                name="currencyCode"
+                required
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                value={formData.currencyCode}
+                onChange={handleChange}
+              >
+                <option value="USD">USD ($)</option>
+                <option value="INR">INR (₹)</option>
+                <option value="EUR">EUR (€)</option>
+                <option value="GBP">GBP (£)</option>
+                <option value="AUD">AUD (A$)</option>
+                <option value="CAD">CAD (CA$)</option>
+                <option value="JPY">JPY (¥)</option>
+                <option value="CNY">CNY (¥)</option>
+                {formData.currencyCode && !['USD','INR','EUR','GBP','AUD','CAD','JPY','CNY'].includes(formData.currencyCode) && (
+                  <option value={formData.currencyCode}>{formData.currencyCode}</option>
+                )}
               </select>
             </div>
           </div>

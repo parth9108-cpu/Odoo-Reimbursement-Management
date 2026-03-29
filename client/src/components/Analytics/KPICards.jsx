@@ -1,6 +1,6 @@
 import React from 'react';
 
-const KPICards = ({ kpis, loading }) => {
+const KPICards = ({ kpis, loading, currencyCode = 'USD' }) => {
   console.log('KPICards kpis:', kpis);
   if (loading) {
     return (
@@ -21,9 +21,9 @@ const KPICards = ({ kpis, loading }) => {
   if (!kpis) return null;
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'INR',
+      currency: currencyCode,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);

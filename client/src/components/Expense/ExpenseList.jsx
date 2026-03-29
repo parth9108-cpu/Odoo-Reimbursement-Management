@@ -47,7 +47,7 @@ const ExpenseList = ({ user }) => {
   };
 
   const formatCurrency = (amount, currency) => {
-    const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
+    const symbols = { INR: '₹', USD: '$', EUR: '€', GBP: '£', CNY: '¥', JPY: '¥', AUD: 'A$', CAD: 'CA$' };
     return `${symbols[currency] || currency} ${amount?.toFixed(2)}`;
   };
 
@@ -107,8 +107,8 @@ const ExpenseList = ({ user }) => {
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-900 font-medium">
                         {formatCurrency(expense.amountOriginal, expense.currencyOriginal)}
-                        {expense.currencyOriginal !== 'INR' && (
-                          <div className="text-xs text-gray-400">≈ ₹{expense.amountCompanyCurrency?.toFixed(0)}</div>
+                        {expense.currencyOriginal !== (user?.companyId?.currencyCode || 'USD') && (
+                          <div className="text-xs text-gray-400">≈ {formatCurrency(expense.amountCompanyCurrency, user?.companyId?.currencyCode || 'USD')}</div>
                         )}
                       </td>
                       <td className="px-4 py-4 text-sm text-gray-600">{expense.category}</td>

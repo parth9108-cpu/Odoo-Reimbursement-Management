@@ -393,21 +393,23 @@ app.get('/api/auth/countries', async (req, res) => {
 // Signup
 app.post('/api/auth/signup', async (req, res) => {
   try {
-    const { name, email, password, role, country, companyName } = req.body;
+    const { name, email, password, role, country, companyName, currencyCode: explicitCurrency } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    let currencyCode = 'USD';
-    try {
-      const response = await axios.get('https://restcountries.com/v3.1/all?fields=name,currencies', { timeout: 3000 });
-      const countryData = response.data.find(c => c.name.common === country);
-      currencyCode = countryData ? Object.keys(countryData.currencies || {})[0] : 'USD';
-    } catch {
-      const currencyMap = { 'India': 'INR', 'United States': 'USD', 'United Kingdom': 'GBP' };
-      currencyCode = currencyMap[country] || 'USD';
+    let currencyCode = explicitCurrency;
+    if (!currencyCode) {
+      try {
+        const response = await axios.get('https://restcountries.com/v3.1/all?fields=name,currencies', { timeout: 3000 });
+        const countryData = response.data.find(c => c.name.common === country);
+        currencyCode = countryData ? Object.keys(countryData.currencies || {})[0] : 'USD';
+      } catch {
+        const currencyMap = { 'India': 'INR', 'United States': 'USD', 'United Kingdom': 'GBP' };
+        currencyCode = currencyMap[country] || 'USD';
+      }
     }
 
     // Create company with default approval flow

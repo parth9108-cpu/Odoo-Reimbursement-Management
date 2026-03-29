@@ -181,7 +181,7 @@ const AnalyticsDashboard = ({ user }) => {
 
       {/* KPI Cards */}
       <div className="mb-6">
-        <KPICards kpis={kpis} loading={loading} />
+        <KPICards kpis={kpis} loading={loading} currencyCode={user?.companyId?.currencyCode || 'USD'} />
       </div>
 
       {/* Main Content Grid */}
@@ -207,6 +207,7 @@ const AnalyticsDashboard = ({ user }) => {
                 approvals={pendingApprovals} 
                 onApprovalAction={fetchAnalyticsData}
                 loading={loading}
+                currencyCode={user?.companyId?.currencyCode || 'USD'}
               />
             </div>
           </div>

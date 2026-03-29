@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import api from '../../services/api';
 
-const PendingApprovalsPanel = ({ approvals, onApprovalAction, loading }) => {
+const PendingApprovalsPanel = ({ approvals, onApprovalAction, loading, currencyCode = 'USD' }) => {
   const [processing, setProcessing] = useState({});
 
   const handleApproval = async (expenseId, decision, comment = '') => {
@@ -24,10 +24,10 @@ const PendingApprovalsPanel = ({ approvals, onApprovalAction, loading }) => {
     }
   };
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-IN', {
+  const formatCurrency = (amount, currencyToUse) => {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'INR',
+      currency: currencyToUse || currencyCode,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(amount);
@@ -92,8 +92,13 @@ const PendingApprovalsPanel = ({ approvals, onApprovalAction, loading }) => {
             </div>
             <div className="text-right ml-3">
               <div className="text-lg font-bold text-gray-900">
-                {formatCurrency(expense.amountCompanyCurrency)}
+                {formatCurrency(expense.amountOriginal || expense.amountCompanyCurrency, expense.currencyOriginal || currencyCode)}
               </div>
+              {expense.currencyOriginal && expense.currencyOriginal !== currencyCode && (
+                <div className="text-xs text-gray-500">
+                  ≈ {formatCurrency(expense.amountCompanyCurrency, currencyCode)}
+                </div>
+              )}
               {expense.extractedFields?.confidences?.merchant && (
                 <div className={`text-xs px-2 py-1 rounded-full ${getConfidenceColor(expense.extractedFields.confidences.merchant)}`}>
                   {expense.extractedFields.confidences.merchant}% confidence
