@@ -102,7 +102,7 @@ npm run dev
 
 ### Approval Workflow
 - **Sequential** — Manager → Finance → Director
-- **Conditional** — percentage-based (e.g. 60% of approvers) or specific-role rules (e.g. CFO auto-approves)
+- **Conditional** — percentage-based (e.g. 60% of approvers) or specific-designation rules (e.g. CFO auto-approves)
 - **Hybrid** — combine sequential + conditional in a single flow
 - Full audit trail with comments
 
@@ -123,7 +123,7 @@ npm run dev
 <p align="center"><img src="images/localhost_3000_dashboard%20(1).png" width="600" alt="Analytics Dashboard" /></p>
 
 ### Admin Panel
-- User management with role assignment (Admin, Manager, Employee, Finance, Director, CFO)
+- User management with role assignment (Admin, Manager, Employee) and designation assignment (CEO, Director, CFO, etc.)
 - Approval flow configuration
 - Audit logs
 - Fraud alerts
